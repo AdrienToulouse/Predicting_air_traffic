@@ -1,10 +1,11 @@
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import ElasticNet
+
 from sklearn.base import BaseEstimator
 
 
 class Regressor(BaseEstimator):
     def __init__(self):
-        self.reg = RandomForestRegressor(n_estimators=50, max_depth=30, max_features=50)
+        self.reg = ElasticNet(alpha=0.001, l1_ratio=0.7)
 
     def fit(self, X, y):
         self.reg.fit(X, y)
