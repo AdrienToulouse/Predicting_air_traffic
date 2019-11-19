@@ -38,10 +38,10 @@ class FeatureExtractor(object):
         X_encoded = X_encoded.drop('Arrival', axis=1)
 
 #Mean encoding
-        X_encoded.loc[:, 'd_ATL': 'd_SFO'] = X_encoded.loc[:, 'd_ATL': 'd_SFO'].mul(X_encoded.loc[:, 'dep_encod'], axis='rows')
-        X_encoded.loc[:, 'a_ATL': 'a_SFO'] = X_encoded.loc[:, 'a_ATL': 'a_SFO'].mul(X_encoded.loc[:, 'ar_encod'], axis='rows')
+        #X_encoded.loc[:, 'd_ATL': 'd_SFO'] = X_encoded.loc[:, 'd_ATL': 'd_SFO'].mul(X_encoded.loc[:, 'dep_encod'], axis='rows')
+        #X_encoded.loc[:, 'a_ATL': 'a_SFO'] = X_encoded.loc[:, 'a_ATL': 'a_SFO'].mul(X_encoded.loc[:, 'ar_encod'], axis='rows')
 
-        X_encoded.drop(['dep_encod', 'ar_encod'], axis=1, inplace=True)
+        #X_encoded.drop(['dep_encod', 'ar_encod'], axis=1, inplace=True)
 
 #One hot encoder for dates
         X_encoded['DateOfDeparture'] = pd.to_datetime(X_encoded['DateOfDeparture'])
@@ -61,7 +61,7 @@ class FeatureExtractor(object):
         X_encoded.drop(['DateOfDeparture', 'year', 'month', 'day', 'weekday', 'week', 'n_days'], axis=1, inplace=True)
 
 #reservations
-        X_encoded.loc[:, 'WeeksToDeparture' : 'std_wtd'] = StandardScaler().fit_transform(X_encoded.loc[:, 'WeeksToDeparture' : 'std_wtd'])
+        #X_encoded.loc[:, 'WeeksToDeparture' : 'std_wtd'] = StandardScaler().fit_transform(X_encoded.loc[:, 'WeeksToDeparture' : 'std_wtd'])
 
         X_encoded.drop(['std_wtd'], axis=1, inplace=True)
 
