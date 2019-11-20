@@ -1,7 +1,6 @@
 import xgboost as xgb
 from sklearn.base import BaseEstimator
 
-#reg_alpha=0.01, reg_lambda=0,
 class Regressor(BaseEstimator):
     def __init__(self):
         self.reg = xgb.XGBRegressor(colsample_bylevel=0.8,
