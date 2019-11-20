@@ -20,7 +20,7 @@ class FeatureExtractor(object):
 # import data_weather and merge it
 
         ext_data = pd.read_csv(os.path.join(path, 'external_data.csv'))
-        external_data = ext_data[['DateOfDeparture', 'Departure', 'Arrival', 'Distance',
+        external_data = ext_data[['DateOfDeparture', 'Departure', 'Arrival', 'Distance', 'Revenue', 'Number_hab',
                                 'Mean TemperatureC', 'dep_encod', 'ar_encod',
                                 'MeanDew PointC', 'Mean Humidity', 'Min VisibilitykM', 'Max Wind SpeedKm/h',
                                 'Precipitationmm','CloudCover','Events']]
