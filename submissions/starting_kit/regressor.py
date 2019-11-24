@@ -6,8 +6,8 @@ class Regressor(BaseEstimator):
     def __init__(self):
         self.reg = xgb.XGBRegressor(base_score=0.5, booster='gbtree', colsample_bylevel=1,
        colsample_bytree=0.7, gamma=0, learning_rate=0.3, max_delta_step=0,
-       max_depth=7, min_child_weight=5, missing=None, n_estimators=1000,
-       n_jobs=1, nthread=4, objective='reg:linear', random_state=0,
+       max_depth=7, min_child_weight=5, missing=None, n_estimators=500,
+       n_jobs=1, nthread=1, objective='reg:linear', random_state=0,
        reg_alpha=0.001, reg_lambda=0, seed=None,
        silent=True, subsample=0.8)
 
