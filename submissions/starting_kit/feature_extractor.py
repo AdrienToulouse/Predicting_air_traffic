@@ -27,7 +27,7 @@ class FeatureExtractor(object):
         ext_data = pd.read_csv(os.path.join(path, 'external_data.csv'))
 
         external_data = ext_data[['DateOfDeparture', 'Departure', 'Arrival', 'Distance',
-                      'dep_encod', 'ar_encod', 'Number_hab'
+                      'dep_encod', 'ar_encod',  'Number_hab'
                       ]]
 
         X_encoded = pd.merge(X_encoded, external_data, how='left',
