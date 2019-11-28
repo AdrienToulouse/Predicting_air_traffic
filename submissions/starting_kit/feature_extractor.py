@@ -24,11 +24,7 @@ class FeatureExtractor(object):
         path = os.path.dirname(__file__)
 
 # import data_weather and merge it
-        ext_data = pd.read_csv(os.path.join(path, 'external_data.csv'))
-
-        external_data = ext_data[['DateOfDeparture', 'Departure', 'Arrival', 'Distance',
-                      'dep_encod', 'ar_encod',  'Number_hab'
-                      ]]
+        external_data = pd.read_csv(os.path.join(path, 'external_data.csv'))
 
         X_encoded = pd.merge(X_encoded, external_data, how='left',
             left_on=['DateOfDeparture', 'Departure', 'Arrival'],
