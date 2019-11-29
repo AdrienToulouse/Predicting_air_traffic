@@ -1,4 +1,3 @@
-
 import pandas as pd
 import os
 import numpy as np
@@ -24,7 +23,12 @@ class FeatureExtractor(object):
         path = os.path.dirname(__file__)
 
 # import data_weather and merge it
-        external_data = pd.read_csv(os.path.join(path, 'external_data.csv'))
+        ext_data = pd.read_csv(os.path.join(path, 'external_data.csv'))
+
+        external_data = ext_data[['DateOfDeparture', 'Departure', 'Arrival', 'Distance',
+                      'dep_encod', 'ar_encod',
+                      'Events'
+                      ]]
 
         X_encoded = pd.merge(X_encoded, external_data, how='left',
             left_on=['DateOfDeparture', 'Departure', 'Arrival'],
@@ -54,7 +58,7 @@ class FeatureExtractor(object):
         X_encoded['day'] = X_encoded['DateOfDeparture'].dt.day
         X_encoded['weekday'] = X_encoded['DateOfDeparture'].dt.weekday
         X_encoded['week'] = X_encoded['DateOfDeparture'].dt.week
-        X_encoded['n_days'] = X_encoded['DateOfDeparture'].apply(lambda date: (date - pd.to_datetime("2011-09-01")).days)
+        X_encoded['n_days'] = X_encoded['DateOfDeparture'].apply(lambda date: (date - pd.to_datetime("1970-01-01")).days)
 
         X_encoded = encode(X_encoded, 'month', 12)
         X_encoded = encode(X_encoded, 'week', 52)
@@ -63,11 +67,24 @@ class FeatureExtractor(object):
 
         X_encoded.drop(['DateOfDeparture', 'year', 'month', 'day', 'weekday', 'week', 'std_wtd'], axis=1, inplace=True)
 
+#meteo
+
+        X_encoded['Events'].fillna(0, inplace=True)
+        X_encoded['Events'] = X_encoded['Events'].replace(['Rain','Fog'], 1)
+        X_encoded['Events'] = X_encoded['Events'].replace(['Rain-Thunderstorm','Fog-Rain-Thunderstorm', \
+                                                'Rain-Snow','Snow','Fog-Rain','Thunderstorm','Fog-Snow', \
+                                                'Fog-Rain-Snow','Fog-Rain-Snow-Thunderstorm', \
+                                                'Rain-Snow-Thunderstorm','Rain-Hail-Thunderstorm', \
+                                                'Fog-Rain-Hail-Thunderstorm', \
+                                                'Rain-Thunderstorm-Tornado'], 2)
+
+        X_encoded['Weeks_to_dep_int'] = pd.qcut(X_encoded['WeeksToDeparture'], 4)
         X_encoded.loc[X_encoded['WeeksToDeparture'] <= 9.524, 'WeeksToDeparture'] = 0
         X_encoded.loc[(X_encoded['WeeksToDeparture'] > 9.524) & (X_encoded['WeeksToDeparture'] <= 11.3), 'WeeksToDeparture'] = 1
         X_encoded.loc[(X_encoded['WeeksToDeparture'] > 11.3) & (X_encoded['WeeksToDeparture'] <= 13.24), 'WeeksToDeparture'] = 2
         X_encoded.loc[ X_encoded['WeeksToDeparture'] > 13.24, 'WeeksToDeparture'] = 3
         X_encoded['WeeksToDeparture'] = X_encoded['WeeksToDeparture'].astype(int)
+        X_encoded.drop(['Weeks_to_dep_int'], axis=1, inplace=True)
 
         X_array = X_encoded.values
         return X_array
