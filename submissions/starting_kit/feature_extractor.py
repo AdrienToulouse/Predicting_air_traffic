@@ -56,7 +56,7 @@ class FeatureExtractor(object):
         X_encoded['day'] = X_encoded['DateOfDeparture'].dt.day
         X_encoded['weekday'] = X_encoded['DateOfDeparture'].dt.weekday
         X_encoded['week'] = X_encoded['DateOfDeparture'].dt.week
-        X_encoded['n_days'] = X_encoded['DateOfDeparture'].apply(lambda date: (date - pd.to_datetime("2011-09-01")).days)
+        X_encoded['n_days'] = X_encoded['DateOfDeparture'].apply(lambda date: (date - pd.to_datetime("1970-01-01")).days)
 
         X_encoded = encode(X_encoded, 'month', 12)
         X_encoded = encode(X_encoded, 'week', 52)
@@ -82,6 +82,7 @@ class FeatureExtractor(object):
         X_encoded.loc[(X_encoded['WeeksToDeparture'] > 11.3) & (X_encoded['WeeksToDeparture'] <= 13.24), 'WeeksToDeparture'] = 2
         X_encoded.loc[ X_encoded['WeeksToDeparture'] > 13.24, 'WeeksToDeparture'] = 3
         X_encoded['WeeksToDeparture'] = X_encoded['WeeksToDeparture'].astype(int)
+        X_encoded.drop(['Weeks_to_dep_int'], axis=1, inplace=True)
 
 
         X_array = X_encoded.values
