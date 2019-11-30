@@ -82,7 +82,6 @@ class FeatureExtractor(object):
         X_encoded.loc[(X_encoded['WeeksToDeparture'] > 11.3) & (X_encoded['WeeksToDeparture'] <= 13.24), 'WeeksToDeparture'] = 2
         X_encoded.loc[ X_encoded['WeeksToDeparture'] > 13.24, 'WeeksToDeparture'] = 3
         X_encoded['WeeksToDeparture'] = X_encoded['WeeksToDeparture'].astype(int)
-        X_encoded.drop(['Weeks_to_dep_int'], axis=1, inplace=True)
 
 
         X_array = X_encoded.values
