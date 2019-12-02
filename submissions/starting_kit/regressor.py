@@ -1,18 +1,37 @@
-import xgboost as xgb
+from xgboost import XGBRegressor
+from lightgbm import LGBMRegressor
+from sklearn.ensemble import RandomForestRegressor
+
 from sklearn.base import BaseEstimator
 
 
 class Regressor(BaseEstimator):
     def __init__(self):
-        self.reg = xgb.XGBRegressor(base_score=0.5, colsample_bylevel=1,
-       colsample_bytree=0.7, gamma=0, learning_rate=0.16, max_delta_step=0,
-       max_depth=7, min_child_weight=5, missing=None, n_estimators=2450,
-       n_jobs=1, nthread=4, objective='reg:squarederror', random_state=0,
-       reg_alpha=0.001, reg_lambda=0, seed=None,
-       silent=True, subsample=.9)
+        self.regXGB = XGBRegressor(base_score=0.5, colsample_bylevel=1,
+               colsample_bytree=0.7, gamma=0, learning_rate=0.16, max_delta_step=0,
+               max_depth=7, min_child_weight=5, missing=None, n_estimators=2450,
+               silent=True, subsample=.9)
+        self.regLGB = LGBMRegressor(num_leaves=40,
+                    boosting_type='gbdt',
+                    objective='regression',
+                    learning_rate=0.1,
+                    max_depth=-1,
+                    n_estimators=1800,
+                    max_bin=255, silent=True,
+                    reg_alpha=.001,
+                    reg_lambda=.01)
+        #self.regRdmF = RandomForestRegressor(n_estimators=50, max_depth=80, max_features=20)
 
     def fit(self, X, y):
-        self.reg.fit(X, y)
+        self.regXGB.fit(X, y)
+        self.regLGB.fit(X, y)
+        #self.regRdmF.fit(X, y)
 
     def predict(self, X):
-        return self.reg.predict(X)
+        XGB = self.regXGB.predict(X)
+        LGB = self.regLGB.predict(X)
+        #RdmF = self.regRdmF.predict(X)
+
+        predict = XGB * 0.6 + LGB * 0.4
+
+        return predict
