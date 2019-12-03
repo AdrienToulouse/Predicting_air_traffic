@@ -1,6 +1,5 @@
 from xgboost import XGBRegressor
 from lightgbm import LGBMRegressor
-from sklearn.ensemble import RandomForestRegressor
 
 from sklearn.base import BaseEstimator
 
@@ -20,18 +19,14 @@ class Regressor(BaseEstimator):
                     max_bin=255, silent=True,
                     reg_alpha=.001,
                     reg_lambda=.01)
-        #self.regRdmF = RandomForestRegressor(n_estimators=50, max_depth=80, max_features=20)
 
     def fit(self, X, y):
         self.regXGB.fit(X, y)
         self.regLGB.fit(X, y)
-        #self.regRdmF.fit(X, y)
 
     def predict(self, X):
         XGB = self.regXGB.predict(X)
         LGB = self.regLGB.predict(X)
-        #RdmF = self.regRdmF.predict(X)
-
         predict = XGB * 0.6 + LGB * 0.4
 
         return predict
