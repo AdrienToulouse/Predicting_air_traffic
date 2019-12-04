@@ -1,14 +1,41 @@
-from sklearn.ensemble import RandomForestRegressor
+import pandas as pd
+from xgboost import XGBRegressor
+from lightgbm import LGBMRegressor
+from sklearn.kernel_ridge import KernelRidge
 from sklearn.base import BaseEstimator
-
 
 class Regressor(BaseEstimator):
     def __init__(self):
-        self.reg = RandomForestRegressor(n_estimators=1000, criterion='mse', max_depth=100, min_samples_split=2,
-        min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features='auto', n_jobs=4)
+        self.regXGB = XGBRegressor(base_score=0.5, colsample_bylevel=1,
+               colsample_bytree=0.7, gamma=0, learning_rate=0.1, max_delta_step=0,
+               max_depth=7, min_child_weight=5, missing=None, n_estimators=2450,
+               silent=True, subsample=.9, n_jobs=4)
+        self.regLGB = LGBMRegressor(num_leaves=40,
+                    boosting_type='gbdt',
+                    objective='regression',
+                    learning_rate=0.1,
+                    max_depth=-1,
+                    n_estimators=2000,
+                    max_bin=200, silent=True,
+                    reg_alpha=.001,
+                    reg_lambda=.01,
+                    n_jobs=4)
+        self.reg = KernelRidge(alpha=.01, kernel='polynomial', degree=3, gamma=1)
 
     def fit(self, X, y):
         self.reg.fit(X, y)
 
+        XGB = self.regXGB.predict(X)
+        LGB = self.regLGB.predict(X)
+
+        prediction = pd.DataFrame({'XGB': XGB, 'LGB': LGB})
+        self.reg.fit(prediction, y)
+
+
     def predict(self, X):
-        return self.reg.predict(X)
+        XGB = self.regXGB.predict(X)
+        LGB = self.regLGB.predict(X)
+
+        prediction = pd.DataFrame({'XGB': XGB, 'LGB': LGB})
+        stack_pred = self.reg.predict(prediction)
+        return .5 * stack_pred + .4 * XGB + .1 * LGB

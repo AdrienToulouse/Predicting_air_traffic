@@ -1,9 +1,6 @@
 import pandas as pd
 import os
 import numpy as np
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-from sklearn import preprocessing
 
 #function to encode the date
 def encode(data, col, max_val):
