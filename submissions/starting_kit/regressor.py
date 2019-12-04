@@ -23,8 +23,7 @@ class Regressor(BaseEstimator):
         self.reg = KernelRidge(alpha=.01, kernel='polynomial', degree=3, gamma=1)
 
     def fit(self, X, y):
-        self.regXGB.fit(X, y)
-        self.regLGB.fit(X, y)
+        self.reg.fit(X, y)
 
         XGB = self.regXGB.predict(X)
         LGB = self.regLGB.predict(X)

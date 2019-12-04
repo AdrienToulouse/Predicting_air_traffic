@@ -71,14 +71,13 @@ class FeatureExtractor(object):
 #Encoding events
 
         X_encoded['Events'].fillna(0, inplace=True)
-        X_encoded['Events'] = X_encoded['Events'].replace(['Rain','Fog'], 1)
+        X_encoded['Events'] = X_encoded['Events'].replace(['Rain','Fog', 'Fog-Rain'], 1)
+        X_encoded['Events'] = X_encoded['Events'].replace(['Rain-Snow', 'Snow','Fog-Snow', 'Fog-Rain-Snow'], 2)
         X_encoded['Events'] = X_encoded['Events'].replace(['Rain-Thunderstorm',
-                                'Fog-Rain-Thunderstorm', 'Rain-Snow', 'Snow',
-                                'Fog-Rain', 'Thunderstorm', 'Fog-Snow',
-                                'Fog-Rain-Snow', 'Fog-Rain-Snow-Thunderstorm',
+                                'Fog-Rain-Thunderstorm', 'Thunderstorm', 'Fog-Rain-Snow-Thunderstorm',
                                 'Rain-Snow-Thunderstorm', 'Rain-Hail-Thunderstorm',
                                 'Fog-Rain-Hail-Thunderstorm',
-                                'Rain-Thunderstorm-Tornado'], 2)
+                                'Rain-Thunderstorm-Tornado'], 3)
 
  #reservations mean
         X_encoded.loc[X_encoded['WeeksToDeparture'] <= 9.524, 'WeeksToDeparture'] = 0
@@ -89,6 +88,6 @@ class FeatureExtractor(object):
         X_encoded.loc[ X_encoded['WeeksToDeparture'] > 13.24, 'WeeksToDeparture'] = 3
         X_encoded['WeeksToDeparture'] = X_encoded['WeeksToDeparture'].astype(int)
 
-
         X_array = X_encoded.values
+
         return X_array
