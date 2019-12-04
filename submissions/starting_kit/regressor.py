@@ -1,32 +1,14 @@
-from xgboost import XGBRegressor
-from lightgbm import LGBMRegressor
-
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.base import BaseEstimator
 
 
 class Regressor(BaseEstimator):
     def __init__(self):
-        self.regXGB = XGBRegressor(base_score=0.5, colsample_bylevel=1,
-               colsample_bytree=0.7, gamma=0, learning_rate=0.16, max_delta_step=0,
-               max_depth=7, min_child_weight=5, missing=None, n_estimators=2450,
-               silent=True, subsample=.9)
-        self.regLGB = LGBMRegressor(num_leaves=40,
-                    boosting_type='gbdt',
-                    objective='regression',
-                    learning_rate=0.1,
-                    max_depth=-1,
-                    n_estimators=1800,
-                    max_bin=255, silent=True,
-                    reg_alpha=.001,
-                    reg_lambda=.01)
+        self.reg = RandomForestRegressor(n_estimators=1000, criterion='mse', max_depth=100, min_samples_split=2,
+        min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features='auto', n_jobs=4)
 
     def fit(self, X, y):
-        self.regXGB.fit(X, y)
-        self.regLGB.fit(X, y)
+        self.reg.fit(X, y)
 
     def predict(self, X):
-        XGB = self.regXGB.predict(X)
-        LGB = self.regLGB.predict(X)
-        predict = XGB * 0.6 + LGB * 0.4
-
-        return predict
+        return self.reg.predict(X)
