@@ -7,7 +7,7 @@ from sklearn.base import BaseEstimator
 class Regressor(BaseEstimator):
     def __init__(self):
         self.regXGB = XGBRegressor(base_score=0.5, colsample_bylevel=1,
-               colsample_bytree=0.7, gamma=0, learning_rate=0.1, max_delta_step=0,
+               colsample_bytree=0.7, gamma=0, learning_rate=0.16, max_delta_step=0,
                max_depth=7, min_child_weight=5, missing=None, n_estimators=2450,
                silent=True, subsample=.9, n_jobs=4)
         self.regLGB = LGBMRegressor(num_leaves=40,
@@ -39,4 +39,4 @@ class Regressor(BaseEstimator):
 
         prediction = pd.DataFrame({'XGB': XGB, 'LGB': LGB})
         stack_pred = self.reg.predict(prediction)
-        return .5 * stack_pred + .4 * XGB + .1 * LGB
+        return stack_pred
